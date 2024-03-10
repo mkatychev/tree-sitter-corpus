@@ -20,7 +20,8 @@
   },
   "homepage": "https://github.com/mkatychev/tree-sitter-corpus#readme",
   "dependencies": {
-    "nan": "^2.19.0"
+    "nan": "^2.19.0",
+    "tree-sitter-query": "^0.1.0"
   },
   "devDependencies": {
     "tree-sitter-cli": "^0.22.0"

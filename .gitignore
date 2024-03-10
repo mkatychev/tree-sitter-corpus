@@ -1,0 +1,22 @@
+# C/C++ language server cache
+.ccls-cache/**
+
+# Node cache
+node_modules
+
+# Tree-sitter ouptut
+build/
+.build/
+log.html
+*.wasm
+
+# Windows things
+*.exp
+*.lib
+*.obj
+
+# Other repos
+# Editor files
+.vscode/
+*.swp
+
