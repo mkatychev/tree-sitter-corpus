@@ -1,0 +1,28 @@
+{
+  "name": "corpus",
+  "version": "0.1.0",
+  "description": "Grammar for tree-sitter corpus files",
+  "main": "bindings/node",
+  "scripts": {
+    "test": "tree-sitter test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mkatychev/tree-sitter-corpus.git"
+  },
+  "keywords": [
+    "tree-sitter"
+  ],
+  "author": "Mikhail Katychev",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mkatychev/tree-sitter-corpus/issues"
+  },
+  "homepage": "https://github.com/mkatychev/tree-sitter-corpus#readme",
+  "dependencies": {
+    "nan": "^2.19.0"
+  },
+  "devDependencies": {
+    "tree-sitter-cli": "^0.22.0"
+  }
+}
