@@ -1,8 +1,9 @@
 # C/C++ language server cache
 .ccls-cache/**
 
-# Node cache
-node_modules
+# Node artifacts
+/build/
+/node_modules/
 
 # Tree-sitter ouptut
 build/
