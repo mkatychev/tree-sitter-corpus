@@ -46,24 +46,29 @@ const NODE_IDENTIFIER = /[a-zA-Z_]\w*/;
 module.exports = grammar({
   name: 'corpus',
 
-  word: $ => $.text,
-
   externals: $ => [
     $._newline,
     $.text,
   ],
+  // Allow comments, backslash-escaped newlines (with optional trailing whitespace),
+  // and whitespace anywhere
+  extras: _ => [/\\(\n|\r\n)\s*/, /\s/],
 
 
   rules: {
-    source_file: $ => seq(repeat($.test)),
+    source_file: $ => repeat($.test),
 
-    test: $ => seq($._header, $._newline, $.input, $._median, $.output, $._newline),
-    _header_delim: $ => seq(/===+/, $._newline),
-    _header: $ => seq($._header_delim, field("name", $.text), $._newline, $._header_delim),
-    _median: $ => seq(/---+/, $._newline),
+    test: $ => seq($._header, $.input, $.median, $.output, $._newline),
+    _header: $ => seq(
+      /===+/,
+      field("name", $.text),
+      $._newline,
+      /===+/, $._newline,
+    ),
+    median: $ => seq(/---+/, $._newline),
     // input
-    _input_line: $ => repeat1($.text),
-    input: $ => seq(repeat1(choice(seq($._input_line, $._newline), $._newline))),
+    _input_line: $ => /.+/,
+    input: $ => repeat1(seq($._input_line, $._newline)),
     // output
     output: $ => repeat1($.node),
     _node_expression: $ => choice(

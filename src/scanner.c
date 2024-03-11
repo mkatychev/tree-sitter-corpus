@@ -1,6 +1,6 @@
 #include "tree_sitter/parser.h"
 
-#include <ctype.h>
+// TODO convert to C libs
 #include <stdio.h>
 #include <string.h>
 #include <wctype.h>
@@ -9,27 +9,13 @@
 #error "expected assertions to be enabled"
 #endif
 
+// Source of newline lexing:
+// https://github.com/tgross35/tree-sitter-just/blob/34d42c7fab52f2c1db459822511923e179374e2b/src/scanner.c#L12
 // Enable this for debugging
 // #define DEBUG_PRINT
 
 #ifndef __FILE_NAME__
 #define __FILE_NAME__ __FILE__
-#endif
-
-#ifdef __GNUC__
-#define unused_attr __attribute__((unused))
-#else
-#define unused_attr
-#endif
-
-#ifdef DEBUG_PRINT
-#define dbg_print(...)                                                         \
-  do {                                                                         \
-    fprintf(stderr, "    \033[96;1mparse: \033[0m");                           \
-    fprintf(stderr, __VA_ARGS__);                                              \
-  } while (0)
-#else
-#define dbg_print(...)
 #endif
 
 #define panic(...)                                                             \
@@ -57,7 +43,6 @@ enum TokenType {
   // ESCAPE,
   NEWLINE,
   TEXT,
-  TOKEN_TYPE_END,
 };
 
 typedef struct Scanner {

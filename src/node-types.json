@@ -36,17 +36,12 @@
   {
     "type": "input",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "text",
-          "named": true
-        }
-      ]
-    }
+    "fields": {}
+  },
+  {
+    "type": "median",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "node",
@@ -129,6 +124,10 @@
       "types": [
         {
           "type": "input",
+          "named": true
+        },
+        {
+          "type": "median",
           "named": true
         },
         {

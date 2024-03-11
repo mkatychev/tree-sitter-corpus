@@ -1,18 +1,12 @@
 {
   "name": "corpus",
-  "word": "text",
   "rules": {
     "source_file": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "REPEAT",
-          "content": {
-            "type": "SYMBOL",
-            "name": "test"
-          }
-        }
-      ]
+      "type": "REPEAT",
+      "content": {
+        "type": "SYMBOL",
+        "name": "test"
+      }
     },
     "test": {
       "type": "SEQ",
@@ -23,15 +17,11 @@
         },
         {
           "type": "SYMBOL",
-          "name": "_newline"
-        },
-        {
-          "type": "SYMBOL",
           "name": "input"
         },
         {
           "type": "SYMBOL",
-          "name": "_median"
+          "name": "median"
         },
         {
           "type": "SYMBOL",
@@ -43,25 +33,12 @@
         }
       ]
     },
-    "_header_delim": {
+    "_header": {
       "type": "SEQ",
       "members": [
         {
           "type": "PATTERN",
           "value": "===+"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "_newline"
-        }
-      ]
-    },
-    "_header": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "SYMBOL",
-          "name": "_header_delim"
         },
         {
           "type": "FIELD",
@@ -76,12 +53,16 @@
           "name": "_newline"
         },
         {
+          "type": "PATTERN",
+          "value": "===+"
+        },
+        {
           "type": "SYMBOL",
-          "name": "_header_delim"
+          "name": "_newline"
         }
       ]
     },
-    "_median": {
+    "median": {
       "type": "SEQ",
       "members": [
         {
@@ -95,41 +76,24 @@
       ]
     },
     "_input_line": {
-      "type": "REPEAT1",
-      "content": {
-        "type": "SYMBOL",
-        "name": "text"
-      }
+      "type": "PATTERN",
+      "value": ".+"
     },
     "input": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "REPEAT1",
-          "content": {
-            "type": "CHOICE",
-            "members": [
-              {
-                "type": "SEQ",
-                "members": [
-                  {
-                    "type": "SYMBOL",
-                    "name": "_input_line"
-                  },
-                  {
-                    "type": "SYMBOL",
-                    "name": "_newline"
-                  }
-                ]
-              },
-              {
-                "type": "SYMBOL",
-                "name": "_newline"
-              }
-            ]
+      "type": "REPEAT1",
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "SYMBOL",
+            "name": "_input_line"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "_newline"
           }
-        }
-      ]
+        ]
+      }
     },
     "output": {
       "type": "REPEAT1",
@@ -215,6 +179,10 @@
     }
   },
   "extras": [
+    {
+      "type": "PATTERN",
+      "value": "\\\\(\\n|\\r\\n)\\s*"
+    },
     {
       "type": "PATTERN",
       "value": "\\s"
