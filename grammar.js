@@ -38,35 +38,22 @@ module.exports = grammar({
 
 
   rules: {
-    source_file: $ => repeat($.test),
-    //     static ref HEADER_REGEX: ByteRegex = ByteRegexBuilder::new(
-    //     r"^(?x)
-    //        (?P<equals>(?:=+){3,})
-    //        (?P<suffix1>[^=\r\n][^\r\n]*)?
-    //        \r?\n
-    //        (?P<test_name>(?:[^=\r\n:][^\r\n]*\r?\n)+(?:(?:[ \t]*\r?\n)+)?)
-    //        (?P<markers>((?::(?:skip|error|fail-fast|(language|platform)\([^\r\n)]+\))\r?\n)*))
-    //        ===+
-    //        (?P<suffix2>[^=\r\n][^\r\n]*)?\r?\n"
-    // )
-    //
-
+    source_file: $ => choice(repeat($.test), repeat($._test__)),
     // Regex definitions
     // https://github.com/tree-sitter/tree-sitter/blob/v0.22.1/cli/src/test.rs#L20-L29
-
     test: $ => seq($._header, $.input, $._median, $.output, $._newline),
-    _test_name: $ => seq(field("name", $.text), $._newline),
-    _marker: $ => seq(
+    _test_name: $ => seq(field("name", seq(/[^=:]/, $.text)), $._newline),
+    attribute: $ => seq(
       choice(
         ":skip",
         ":error",
         ":fail-fast",
-        $._language_marker,
+        $._language_attribute,
         seq(":platform", "(", $.platform, ")"),
       ),
       $._newline,
     ),
-    _language_marker: $ => seq(":language", "(", $.language, ")"),
+    _language_attribute: $ => seq(":language", "(", $.language, ")"),
     language: _ => LANG_IDENTIFIER,
     // https://doc.rust-lang.org/std/env/consts/constant.OS.html
     platform: _ => /[a-z]+/,
@@ -75,7 +62,7 @@ module.exports = grammar({
     _header: $ => seq(
       $._header_delim,
       $._test_name,
-      repeat($._marker),
+      repeat($.attribute),
       $._header_delim
     ),
     _median: $ => seq(/---+/, $._newline),
@@ -99,15 +86,16 @@ module.exports = grammar({
           (parameter_list (identifier))
           (plus (identifier_ref) (number)))))
     */
-    _suffix: $ => token(/[^=]\S*/),
-    _header_delim_suffix: $ => seq(/===+/, $._suffix, $._newline),
-    _header_suffix: $ => seq(
-      $._header_delim_suffix,
+    suffix__: $ => /[^=]\S*/,
+    _test__: $ => seq($._header__, $.input, $._median__, $.output, $._newline),
+    header_delim__: $ => seq(/===+/, $.suffix__, $._newline),
+    _header__: $ => seq(
+      $.header_delim__,
       $._test_name,
-      repeat($._marker),
-      $._header_delim_suffix,
+      repeat($.attribute),
+      $.header_delim__,
     ),
-    _median_suffix: $ => seq(/---+/, $._suffix, $._newline),
+    _median__: $ => seq(/---+/, $.suffix__, $._newline),
 
 
 

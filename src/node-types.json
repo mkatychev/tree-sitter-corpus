@@ -1,5 +1,39 @@
 [
   {
+    "type": "attribute",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "language",
+          "named": true
+        },
+        {
+          "type": "platform",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "header_delim__",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "suffix__",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "input",
     "named": true,
     "fields": {}
@@ -45,11 +79,42 @@
   {
     "type": "source_file",
     "named": true,
-    "fields": {},
+    "fields": {
+      "name": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "text",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": true,
       "required": false,
       "types": [
+        {
+          "type": "attribute",
+          "named": true
+        },
+        {
+          "type": "header_delim__",
+          "named": true
+        },
+        {
+          "type": "input",
+          "named": true
+        },
+        {
+          "type": "output",
+          "named": true
+        },
+        {
+          "type": "suffix__",
+          "named": true
+        },
         {
           "type": "test",
           "named": true
@@ -62,7 +127,7 @@
     "named": true,
     "fields": {
       "name": {
-        "multiple": false,
+        "multiple": true,
         "required": true,
         "types": [
           {
@@ -77,19 +142,15 @@
       "required": true,
       "types": [
         {
+          "type": "attribute",
+          "named": true
+        },
+        {
           "type": "input",
           "named": true
         },
         {
-          "type": "language",
-          "named": true
-        },
-        {
           "type": "output",
-          "named": true
-        },
-        {
-          "type": "platform",
           "named": true
         }
       ]
@@ -145,6 +206,10 @@
   },
   {
     "type": "platform",
+    "named": true
+  },
+  {
+    "type": "suffix__",
     "named": true
   },
   {
