@@ -1,14 +1,72 @@
 #include "tree_sitter/parser.h"
-#include "tree_sitter/alloc.h"
-#include "tree_sitter/array.h"
+
+#include <ctype.h>
+#include <stdio.h>
+#include <string.h>
+#include <wctype.h>
+
+#ifdef NDEBUG
+#error "expected assertions to be enabled"
+#endif
+
+// Enable this for debugging
+// #define DEBUG_PRINT
+
+#ifndef __FILE_NAME__
+#define __FILE_NAME__ __FILE__
+#endif
+
+#ifdef __GNUC__
+#define unused_attr __attribute__((unused))
+#else
+#define unused_attr
+#endif
+
+#ifdef DEBUG_PRINT
+#define dbg_print(...)                                                         \
+  do {                                                                         \
+    fprintf(stderr, "    \033[96;1mparse: \033[0m");                           \
+    fprintf(stderr, __VA_ARGS__);                                              \
+  } while (0)
+#else
+#define dbg_print(...)
+#endif
+
+#define panic(...)                                                             \
+  do {                                                                         \
+    fprintf(stderr, "panic at %s:%d: ", __FILE_NAME__, __LINE__);              \
+    fprintf(stderr, __VA_ARGS__);                                              \
+    fprintf(stderr, "\n");                                                     \
+    exit(1);                                                                   \
+  } while (0);
+
+#define assertf(condition, ...)                                                \
+  do {                                                                         \
+    if (__builtin_expect(!(condition), 0)) {                                   \
+      panic(__VA_ARGS__);                                                      \
+    }                                                                          \
+  } while (0);
+
+#ifndef __GNUC__
+#define __builtin_expect(a, b) a
+#endif
+
+#define SBYTES sizeof(Scanner)
 
 enum TokenType {
-  INDENT,
-  DEDENT,
-  NEWLINE
+  // ESCAPE,
+  NEWLINE,
   TEXT,
-}
-  // This function should create your scanner object. It will only be called once
+  TOKEN_TYPE_END,
+};
+
+typedef struct Scanner {
+  bool has_seen_eof;
+	// TODO
+	// char escape[];
+} Scanner;
+
+// This function should create your scanner object. It will only be called once
 // anytime your language is set on a parser. Often, you will want to allocate
 // memory on the heap and return a pointer to it. If your external scanner
 // doesn’t need to maintain any state, it’s ok to return NULL.
@@ -45,13 +103,37 @@ void tree_sitter_corpus_external_scanner_deserialize(void *payload,
                                                    unsigned length) {
   Scanner *ptr = (Scanner *)payload;
   if (length == 0) {
-    ptr->prev_indent = 0;
     ptr->has_seen_eof = false;
     return;
   }
   memcpy(ptr, buffer, SBYTES);
 }
 
+// Continue and include the preceding character in the token
+static inline void advance(TSLexer *lexer) { lexer->advance(lexer, false); }
+
+// Continue and discard the preceding character
+static inline void skip(TSLexer *lexer) { lexer->advance(lexer, true); }
+
+// An EOF works as a dedent
+static bool handle_eof(TSLexer *lexer, Scanner *state,
+                       const bool *valid_symbols) {
+  assertf(lexer->eof(lexer), "expected EOF");
+  lexer->mark_end(lexer);
+
+  if (valid_symbols[NEWLINE]) {
+    if (state->has_seen_eof) {
+      // allow EOF to count for a single symbol. Don't return true more than
+      // once, otherwise it will keep calling us thinking there are more tokens.
+      return false;
+    }
+
+    lexer->result_symbol = NEWLINE;
+    state->has_seen_eof = true;
+    return true;
+  }
+  return false;
+}
 
 // This function is responsible for recognizing external tokens. It should
 // return true if a token was recognized, and false otherwise.
@@ -65,14 +147,9 @@ bool tree_sitter_corpus_external_scanner_scan(void *payload, TSLexer *lexer,
 
   // Handle backslash escaping for newlines
   if (valid_symbols[NEWLINE]) {
-    bool escape = false;
-    if (lexer->lookahead == '\\') {
-      escape = true;
-      skip(lexer);
-    }
-
     bool eol_found = false;
     while (iswspace(lexer->lookahead)) {
+			// TODO handle carriage return "\r\n" || '\n'
       if (lexer->lookahead == '\n') {
         skip(lexer);
         eol_found = true;
@@ -81,72 +158,23 @@ bool tree_sitter_corpus_external_scanner_scan(void *payload, TSLexer *lexer,
       skip(lexer);
     }
 
-    if (eol_found && !escape) {
+    // if (eol_found && escape_found) {
+    if (eol_found) {
       lexer->result_symbol = NEWLINE;
       return true;
     }
   }
 
-  if (valid_symbols[INDENT] || valid_symbols[DEDENT]) {
-    while (!lexer->eof(lexer) && isspace(lexer->lookahead)) {
-      switch (lexer->lookahead) {
-      case '\n':
-        if (valid_symbols[INDENT]) {
-          return false;
-        }
-
-      case '\t':
-      case ' ':
-        skip(lexer);
-        break;
-
-      default:
-        return false;
-      }
-    }
-
-    if (lexer->eof(lexer)) {
-      return handle_eof(lexer, scanner, valid_symbols);
-    }
-
-    uint32_t indent = lexer->get_column(lexer);
-
-    if (indent > scanner->prev_indent && valid_symbols[INDENT] &&
-        scanner->prev_indent == 0) {
-      lexer->result_symbol = INDENT;
-      scanner->prev_indent = indent;
-      return true;
-    }
-    if (indent < scanner->prev_indent && valid_symbols[DEDENT] && indent == 0) {
-      lexer->result_symbol = DEDENT;
-      scanner->prev_indent = indent;
-      return true;
-    }
-  }
 
   if (valid_symbols[TEXT]) {
-    if (lexer->get_column(lexer) == scanner->prev_indent &&
-        (lexer->lookahead == '\n' || lexer->lookahead == '@' ||
-         lexer->lookahead == '-')) {
-      return false;
-    }
-
     bool advanced_once = false;
-
-    while (lexer->lookahead == '{' && scanner->advance_brace_count > 0 &&
-           !lexer->eof(lexer)) {
-      scanner->advance_brace_count--;
-      advance(lexer);
-      advanced_once = true;
-    }
 
     while (1) {
       if (lexer->eof(lexer)) {
         return handle_eof(lexer, scanner, valid_symbols);
       }
 
-      while (!lexer->eof(lexer) && lexer->lookahead != '\n' &&
-             lexer->lookahead != '{') {
+      while (!lexer->eof(lexer) && lexer->lookahead != '\n') {
         // Can't start with #!
         if (lexer->lookahead == '#' && !advanced_once) {
           advance(lexer);
@@ -158,56 +186,20 @@ bool tree_sitter_corpus_external_scanner_scan(void *payload, TSLexer *lexer,
         advance(lexer);
         advanced_once = true;
       }
-
-      if (lexer->lookahead == '\n' || lexer->eof(lexer)) {
-        lexer->mark_end(lexer);
-        lexer->result_symbol = TEXT;
-        if (advanced_once) {
-          return true;
-        }
-        if (lexer->eof(lexer)) {
-          return handle_eof(lexer, scanner, valid_symbols);
-        }
-        advance(lexer);
-      } else if (lexer->lookahead == '{') {
-        lexer->mark_end(lexer);
-        advance(lexer);
-
-        if (lexer->eof(lexer) ||
-            lexer->lookahead == '\n') { // EOF without anything after {
-          lexer->mark_end(lexer);
-          lexer->result_symbol = TEXT;
-          return advanced_once;
-        }
-
-        if (lexer->lookahead == '{') {
-          advance(lexer);
-
-          while (lexer->lookahead == '{') { // more braces!
-            scanner->advance_brace_count++;
-            advance(lexer);
-          }
-
-          // scan till a balanced pair of }} are found, then assume it's a valid
-          // interpolation
-          while (!lexer->eof(lexer) && lexer->lookahead != '\n') {
-            advance(lexer);
-            if (lexer->lookahead == '}') {
-              advance(lexer);
-              if (lexer->lookahead == '}') {
-                lexer->result_symbol = TEXT;
-                return advanced_once;
-              }
-            }
-          }
-
-          if (!advanced_once) {
-            return false;
-          }
-        }
-      }
+			if (lexer->lookahead == '\n' || lexer->eof(lexer)) {
+							lexer->mark_end(lexer);
+							lexer->result_symbol = TEXT;
+							if (advanced_once) {
+								return true;
+							}
+							if (lexer->eof(lexer)) {
+								return handle_eof(lexer, scanner, valid_symbols);
+							}
+							advance(lexer);
+			}
     }
   }
 
   return false;
 }
+

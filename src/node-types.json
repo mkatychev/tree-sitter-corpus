@@ -1,61 +1,5 @@
 [
   {
-    "type": "anonymous_node",
-    "named": true,
-    "fields": {
-      "name": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "_",
-            "named": false
-          },
-          {
-            "type": "identifier",
-            "named": true
-          }
-        ]
-      },
-      "quantifier": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "quantifier",
-            "named": true
-          }
-        ]
-      }
-    },
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "capture",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "capture",
-    "named": true,
-    "fields": {
-      "name": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "identifier",
-            "named": true
-          }
-        ]
-      }
-    }
-  },
-  {
     "type": "field_definition",
     "named": true,
     "fields": {
@@ -79,92 +23,11 @@
       "required": true,
       "types": [
         {
-          "type": "anonymous_node",
-          "named": true
-        },
-        {
           "type": "field_definition",
           "named": true
         },
         {
-          "type": "grouping",
-          "named": true
-        },
-        {
-          "type": "list",
-          "named": true
-        },
-        {
-          "type": "named_node",
-          "named": true
-        },
-        {
-          "type": "predicate",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "grouping",
-    "named": true,
-    "fields": {
-      "quantifier": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "quantifier",
-            "named": true
-          }
-        ]
-      }
-    },
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "anonymous_node",
-          "named": true
-        },
-        {
-          "type": "capture",
-          "named": true
-        },
-        {
-          "type": "field_definition",
-          "named": true
-        },
-        {
-          "type": "grouping",
-          "named": true
-        },
-        {
-          "type": "list",
-          "named": true
-        },
-        {
-          "type": "named_node",
-          "named": true
-        },
-        {
-          "type": "predicate",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "identifier",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "escape_sequence",
+          "type": "node",
           "named": true
         }
       ]
@@ -186,57 +49,7 @@
     }
   },
   {
-    "type": "list",
-    "named": true,
-    "fields": {
-      "quantifier": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "quantifier",
-            "named": true
-          }
-        ]
-      }
-    },
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "anonymous_node",
-          "named": true
-        },
-        {
-          "type": "capture",
-          "named": true
-        },
-        {
-          "type": "field_definition",
-          "named": true
-        },
-        {
-          "type": "grouping",
-          "named": true
-        },
-        {
-          "type": "list",
-          "named": true
-        },
-        {
-          "type": "named_node",
-          "named": true
-        },
-        {
-          "type": "predicate",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "named_node",
+    "type": "node",
     "named": true,
     "fields": {
       "name": {
@@ -244,21 +57,7 @@
         "required": true,
         "types": [
           {
-            "type": "_",
-            "named": false
-          },
-          {
             "type": "identifier",
-            "named": true
-          }
-        ]
-      },
-      "quantifier": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "quantifier",
             "named": true
           }
         ]
@@ -269,50 +68,11 @@
       "required": false,
       "types": [
         {
-          "type": "anonymous_node",
-          "named": true
-        },
-        {
-          "type": "capture",
-          "named": true
-        },
-        {
           "type": "field_definition",
           "named": true
         },
         {
-          "type": "grouping",
-          "named": true
-        },
-        {
-          "type": "list",
-          "named": true
-        },
-        {
-          "type": "named_node",
-          "named": true
-        },
-        {
-          "type": "negated_field",
-          "named": true
-        },
-        {
-          "type": "predicate",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "negated_field",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "identifier",
+          "type": "node",
           "named": true
         }
       ]
@@ -327,34 +87,14 @@
       "required": true,
       "types": [
         {
-          "type": "anonymous_node",
-          "named": true
-        },
-        {
-          "type": "field_definition",
-          "named": true
-        },
-        {
-          "type": "grouping",
-          "named": true
-        },
-        {
-          "type": "list",
-          "named": true
-        },
-        {
-          "type": "named_node",
-          "named": true
-        },
-        {
-          "type": "predicate",
+          "type": "node",
           "named": true
         }
       ]
     }
   },
   {
-    "type": "parameters",
+    "type": "source_file",
     "named": true,
     "fields": {},
     "children": {
@@ -362,110 +102,7 @@
       "required": false,
       "types": [
         {
-          "type": "capture",
-          "named": true
-        },
-        {
-          "type": "identifier",
-          "named": true
-        },
-        {
-          "type": "string",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "predicate",
-    "named": true,
-    "fields": {
-      "name": {
-        "multiple": true,
-        "required": true,
-        "types": [
-          {
-            "type": "#",
-            "named": false
-          },
-          {
-            "type": "identifier",
-            "named": true
-          }
-        ]
-      },
-      "parameters": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "parameters",
-            "named": true
-          }
-        ]
-      },
-      "type": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "predicate_type",
-            "named": true
-          }
-        ]
-      }
-    }
-  },
-  {
-    "type": "program",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "anonymous_node",
-          "named": true
-        },
-        {
-          "type": "field_definition",
-          "named": true
-        },
-        {
-          "type": "grouping",
-          "named": true
-        },
-        {
-          "type": "list",
-          "named": true
-        },
-        {
-          "type": "named_node",
-          "named": true
-        },
-        {
-          "type": "predicate",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "quantifier",
-    "named": true,
-    "fields": {}
-  },
-  {
-    "type": "string",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "escape_sequence",
+          "type": "test",
           "named": true
         }
       ]
@@ -502,18 +139,6 @@
     }
   },
   {
-    "type": "!",
-    "named": false
-  },
-  {
-    "type": "\"",
-    "named": false
-  },
-  {
-    "type": "#",
-    "named": false
-  },
-  {
     "type": "(",
     "named": false
   },
@@ -522,51 +147,11 @@
     "named": false
   },
   {
-    "type": "*",
-    "named": false
-  },
-  {
-    "type": "+",
-    "named": false
-  },
-  {
-    "type": ".",
-    "named": false
-  },
-  {
     "type": ":",
     "named": false
   },
   {
-    "type": "?",
-    "named": false
-  },
-  {
-    "type": "@",
-    "named": false
-  },
-  {
-    "type": "[",
-    "named": false
-  },
-  {
-    "type": "]",
-    "named": false
-  },
-  {
-    "type": "_",
-    "named": false
-  },
-  {
-    "type": "comment",
-    "named": true
-  },
-  {
-    "type": "escape_sequence",
-    "named": true
-  },
-  {
-    "type": "predicate_type",
+    "type": "identifier",
     "named": true
   },
   {
