@@ -47,8 +47,8 @@ enum TokenType {
 
 typedef struct Scanner {
   bool has_seen_eof;
-	// TODO
-	// char escape[];
+  // TODO
+  // char escape[];
 } Scanner;
 
 // This function should create your scanner object. It will only be called once
@@ -74,7 +74,7 @@ void tree_sitter_corpus_external_scanner_destroy(void *payload) {
 // serialized. It receives as an argument the same pointer that was returned
 // from the create function.
 unsigned tree_sitter_corpus_external_scanner_serialize(void *payload,
-                                                     char *buffer) {
+                                                       char *buffer) {
   assertf(SBYTES < TREE_SITTER_SERIALIZATION_BUFFER_SIZE,
           "invalid scanner size");
   memcpy(buffer, payload, SBYTES);
@@ -84,8 +84,8 @@ unsigned tree_sitter_corpus_external_scanner_serialize(void *payload,
 // Reconstruct a scanner from the serialized state. This is called when the
 // parser is deserialized.
 void tree_sitter_corpus_external_scanner_deserialize(void *payload,
-                                                   const char *buffer,
-                                                   unsigned length) {
+                                                     const char *buffer,
+                                                     unsigned length) {
   Scanner *ptr = (Scanner *)payload;
   if (length == 0) {
     ptr->has_seen_eof = false;
@@ -123,7 +123,7 @@ static bool handle_eof(TSLexer *lexer, Scanner *state,
 // This function is responsible for recognizing external tokens. It should
 // return true if a token was recognized, and false otherwise.
 bool tree_sitter_corpus_external_scanner_scan(void *payload, TSLexer *lexer,
-                                            const bool *valid_symbols) {
+                                              const bool *valid_symbols) {
   Scanner *scanner = (Scanner *)(payload);
 
   if (lexer->eof(lexer)) {
@@ -134,7 +134,7 @@ bool tree_sitter_corpus_external_scanner_scan(void *payload, TSLexer *lexer,
   if (valid_symbols[NEWLINE]) {
     bool eol_found = false;
     while (iswspace(lexer->lookahead)) {
-			// TODO handle carriage return "\r\n" || '\n'
+      // TODO handle carriage return "\r\n" || '\n'
       if (lexer->lookahead == '\n') {
         skip(lexer);
         eol_found = true;
@@ -149,7 +149,6 @@ bool tree_sitter_corpus_external_scanner_scan(void *payload, TSLexer *lexer,
       return true;
     }
   }
-
 
   if (valid_symbols[TEXT]) {
     bool advanced_once = false;
@@ -171,20 +170,19 @@ bool tree_sitter_corpus_external_scanner_scan(void *payload, TSLexer *lexer,
         advance(lexer);
         advanced_once = true;
       }
-			if (lexer->lookahead == '\n' || lexer->eof(lexer)) {
-							lexer->mark_end(lexer);
-							lexer->result_symbol = TEXT;
-							if (advanced_once) {
-								return true;
-							}
-							if (lexer->eof(lexer)) {
-								return handle_eof(lexer, scanner, valid_symbols);
-							}
-							advance(lexer);
-			}
+      if (lexer->lookahead == '\n' || lexer->eof(lexer)) {
+        lexer->mark_end(lexer);
+        lexer->result_symbol = TEXT;
+        if (advanced_once) {
+          return true;
+        }
+        if (lexer->eof(lexer)) {
+          return handle_eof(lexer, scanner, valid_symbols);
+        }
+        advance(lexer);
+      }
     }
   }
 
   return false;
 }
-
