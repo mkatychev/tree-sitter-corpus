@@ -39,11 +39,6 @@
     "fields": {}
   },
   {
-    "type": "median",
-    "named": true,
-    "fields": {}
-  },
-  {
     "type": "node",
     "named": true,
     "fields": {
@@ -124,10 +119,6 @@
       "types": [
         {
           "type": "input",
-          "named": true
-        },
-        {
-          "type": "median",
           "named": true
         },
         {

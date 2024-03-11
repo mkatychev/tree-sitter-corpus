@@ -3,9 +3,12 @@
   "version": "0.1.0",
   "description": "Grammar for tree-sitter corpus files",
   "main": "bindings/node",
+  "types": "bindings/node",
   "scripts": {
     "build": "tree-sitter generate && node-gyp build",
-    "test": "tree-sitter test"
+    "test": "tree-sitter test",
+    "install": "node-gyp-build",
+    "prebuildify": "prebuildify --napi --strip"
   },
   "repository": {
     "type": "git",
@@ -14,6 +17,13 @@
   "keywords": [
     "tree-sitter"
   ],
+  "files": [
+    "grammar.js",
+    "prebuilds/**",
+    "bindings/node/*",
+    "queries/*",
+    "src/**"
+  ],
   "author": "Mikhail Katychev",
   "license": "MIT",
   "bugs": {
@@ -21,9 +31,28 @@
   },
   "homepage": "https://github.com/mkatychev/tree-sitter-corpus#readme",
   "dependencies": {
-    "nan": "^2.19.0"
+    "node-gyp-build": "^4.8.0",
+    "node-addon-api": "^7.1.0"
+  },
+  "peerDependencies": {
+    "tree-sitter": "^0.21.0"
+  },
+  "peerDependenciesMeta": {
+    "tree_sitter": {
+      "optional": true
+    }
   },
   "devDependencies": {
-    "tree-sitter-cli": "^0.22.0"
-  }
+    "tree-sitter-cli": "^0.22.1",
+    "prebuildify": "^6.0.0"
+  },
+  "tree-sitter": [
+    {
+      "scope": "source.corpus",
+      "injection-regex": "^corpus$",
+      "file-types": [
+        "txt"
+      ]
+    }
+  ]
 }

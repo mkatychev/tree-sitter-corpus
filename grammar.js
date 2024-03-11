@@ -52,20 +52,20 @@ module.exports = grammar({
   ],
   // Allow comments, backslash-escaped newlines (with optional trailing whitespace),
   // and whitespace anywhere
-  extras: _ => [/\\(\n|\r\n)\s*/, /\s/],
+  // extras: _ => [/\\(\n|\r\n)\s*/, /\s/],
 
 
   rules: {
     source_file: $ => repeat($.test),
 
-    test: $ => seq($._header, $.input, $.median, $.output, $._newline),
+    test: $ => seq($._header, $.input, $._median, $.output, $._newline),
     _header: $ => seq(
       /===+/,
       field("name", $.text),
       $._newline,
       /===+/, $._newline,
     ),
-    median: $ => seq(/---+/, $._newline),
+    _median: $ => seq(/---+/, $._newline),
     // input
     _input_line: $ => /.+/,
     input: $ => repeat1(seq($._input_line, $._newline)),

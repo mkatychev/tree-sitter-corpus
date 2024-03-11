@@ -21,7 +21,7 @@
         },
         {
           "type": "SYMBOL",
-          "name": "median"
+          "name": "_median"
         },
         {
           "type": "SYMBOL",
@@ -62,7 +62,7 @@
         }
       ]
     },
-    "median": {
+    "_median": {
       "type": "SEQ",
       "members": [
         {
@@ -179,10 +179,6 @@
     }
   },
   "extras": [
-    {
-      "type": "PATTERN",
-      "value": "\\\\(\\n|\\r\\n)\\s*"
-    },
     {
       "type": "PATTERN",
       "value": "\\s"

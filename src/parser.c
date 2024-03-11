@@ -1,7 +1,6 @@
 #include "tree_sitter/parser.h"
 
 #if defined(__GNUC__) || defined(__clang__)
-#pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wmissing-field-initializers"
 #endif
 
@@ -18,7 +17,7 @@
 
 enum ts_symbol_identifiers {
   aux_sym__header_token1 = 1,
-  aux_sym_median_token1 = 2,
+  aux_sym__median_token1 = 2,
   sym__input_line = 3,
   anon_sym_LPAREN = 4,
   anon_sym_RPAREN = 5,
@@ -29,7 +28,7 @@ enum ts_symbol_identifiers {
   sym_source_file = 10,
   sym_test = 11,
   sym__header = 12,
-  sym_median = 13,
+  sym__median = 13,
   sym_input = 14,
   sym_output = 15,
   sym__node_expression = 16,
@@ -45,7 +44,7 @@ enum ts_symbol_identifiers {
 static const char * const ts_symbol_names[] = {
   [ts_builtin_sym_end] = "end",
   [aux_sym__header_token1] = "_header_token1",
-  [aux_sym_median_token1] = "median_token1",
+  [aux_sym__median_token1] = "_median_token1",
   [sym__input_line] = "_input_line",
   [anon_sym_LPAREN] = "(",
   [anon_sym_RPAREN] = ")",
@@ -56,7 +55,7 @@ static const char * const ts_symbol_names[] = {
   [sym_source_file] = "source_file",
   [sym_test] = "test",
   [sym__header] = "_header",
-  [sym_median] = "median",
+  [sym__median] = "_median",
   [sym_input] = "input",
   [sym_output] = "output",
   [sym__node_expression] = "_node_expression",
@@ -72,7 +71,7 @@ static const char * const ts_symbol_names[] = {
 static const TSSymbol ts_symbol_map[] = {
   [ts_builtin_sym_end] = ts_builtin_sym_end,
   [aux_sym__header_token1] = aux_sym__header_token1,
-  [aux_sym_median_token1] = aux_sym_median_token1,
+  [aux_sym__median_token1] = aux_sym__median_token1,
   [sym__input_line] = sym__input_line,
   [anon_sym_LPAREN] = anon_sym_LPAREN,
   [anon_sym_RPAREN] = anon_sym_RPAREN,
@@ -83,7 +82,7 @@ static const TSSymbol ts_symbol_map[] = {
   [sym_source_file] = sym_source_file,
   [sym_test] = sym_test,
   [sym__header] = sym__header,
-  [sym_median] = sym_median,
+  [sym__median] = sym__median,
   [sym_input] = sym_input,
   [sym_output] = sym_output,
   [sym__node_expression] = sym__node_expression,
@@ -105,7 +104,7 @@ static const TSSymbolMetadata ts_symbol_metadata[] = {
     .visible = false,
     .named = false,
   },
-  [aux_sym_median_token1] = {
+  [aux_sym__median_token1] = {
     .visible = false,
     .named = false,
   },
@@ -149,8 +148,8 @@ static const TSSymbolMetadata ts_symbol_metadata[] = {
     .visible = false,
     .named = true,
   },
-  [sym_median] = {
-    .visible = true,
+  [sym__median] = {
+    .visible = false,
     .named = true,
   },
   [sym_input] = {
@@ -273,142 +272,108 @@ static bool ts_lex(TSLexer *lexer, TSStateId state) {
   eof = lexer->eof(lexer);
   switch (state) {
     case 0:
-      if (eof) ADVANCE(10);
-      if (lookahead == '(') ADVANCE(20);
-      if (lookahead == ')') ADVANCE(21);
+      if (eof) ADVANCE(7);
+      if (lookahead == '(') ADVANCE(16);
+      if (lookahead == ')') ADVANCE(17);
       if (lookahead == '-') ADVANCE(4);
-      if (lookahead == ':') ADVANCE(23);
+      if (lookahead == ':') ADVANCE(19);
       if (lookahead == '=') ADVANCE(6);
-      if (lookahead == '\\') SKIP(8)
       if (('\t' <= lookahead && lookahead <= '\r') ||
           lookahead == ' ') SKIP(0)
       if (('A' <= lookahead && lookahead <= 'Z') ||
           lookahead == '_' ||
-          ('a' <= lookahead && lookahead <= 'z')) ADVANCE(22);
+          ('a' <= lookahead && lookahead <= 'z')) ADVANCE(18);
       END_STATE();
     case 1:
       if (lookahead == '\n') SKIP(1)
-      if (lookahead == '-') ADVANCE(17);
-      if (lookahead == '\\') ADVANCE(14);
+      if (lookahead == '-') ADVANCE(13);
       if (('\t' <= lookahead && lookahead <= '\r') ||
-          lookahead == ' ') ADVANCE(15);
-      if (lookahead != 0) ADVANCE(19);
+          lookahead == ' ') ADVANCE(11);
+      if (lookahead != 0) ADVANCE(15);
       END_STATE();
     case 2:
       if (lookahead == '\n') SKIP(2)
-      if (lookahead == '\\') ADVANCE(14);
       if (('\t' <= lookahead && lookahead <= '\r') ||
-          lookahead == ' ') ADVANCE(18);
-      if (lookahead != 0) ADVANCE(19);
+          lookahead == ' ') ADVANCE(14);
+      if (lookahead != 0) ADVANCE(15);
       END_STATE();
     case 3:
-      if (lookahead == '-') ADVANCE(12);
+      if (lookahead == '-') ADVANCE(9);
       END_STATE();
     case 4:
       if (lookahead == '-') ADVANCE(3);
       END_STATE();
     case 5:
-      if (lookahead == '=') ADVANCE(11);
+      if (lookahead == '=') ADVANCE(8);
       END_STATE();
     case 6:
       if (lookahead == '=') ADVANCE(5);
       END_STATE();
     case 7:
-      if (eof) ADVANCE(10);
-      if (lookahead == '\n') SKIP(9)
-      END_STATE();
-    case 8:
-      if (eof) ADVANCE(10);
-      if (lookahead == '\n') SKIP(9)
-      if (lookahead == '\r') SKIP(7)
-      END_STATE();
-    case 9:
-      if (eof) ADVANCE(10);
-      if (lookahead == '(') ADVANCE(20);
-      if (lookahead == ')') ADVANCE(21);
-      if (lookahead == '-') ADVANCE(4);
-      if (lookahead == ':') ADVANCE(23);
-      if (lookahead == '=') ADVANCE(6);
-      if (lookahead == '\\') SKIP(8)
-      if (('\t' <= lookahead && lookahead <= '\r') ||
-          lookahead == ' ') SKIP(9)
-      if (('A' <= lookahead && lookahead <= 'Z') ||
-          lookahead == '_' ||
-          ('a' <= lookahead && lookahead <= 'z')) ADVANCE(22);
-      END_STATE();
-    case 10:
       ACCEPT_TOKEN(ts_builtin_sym_end);
       END_STATE();
-    case 11:
+    case 8:
       ACCEPT_TOKEN(aux_sym__header_token1);
-      if (lookahead == '=') ADVANCE(11);
+      if (lookahead == '=') ADVANCE(8);
+      END_STATE();
+    case 9:
+      ACCEPT_TOKEN(aux_sym__median_token1);
+      if (lookahead == '-') ADVANCE(9);
+      END_STATE();
+    case 10:
+      ACCEPT_TOKEN(aux_sym__median_token1);
+      if (lookahead == '-') ADVANCE(10);
+      if (lookahead != 0 &&
+          lookahead != '\n') ADVANCE(15);
+      END_STATE();
+    case 11:
+      ACCEPT_TOKEN(sym__input_line);
+      if (lookahead == '-') ADVANCE(13);
+      if (lookahead == '\t' ||
+          (11 <= lookahead && lookahead <= '\r') ||
+          lookahead == ' ') ADVANCE(11);
+      if (lookahead != 0 &&
+          lookahead != '\n') ADVANCE(15);
       END_STATE();
     case 12:
-      ACCEPT_TOKEN(aux_sym_median_token1);
-      if (lookahead == '-') ADVANCE(12);
+      ACCEPT_TOKEN(sym__input_line);
+      if (lookahead == '-') ADVANCE(10);
+      if (lookahead != 0 &&
+          lookahead != '\n') ADVANCE(15);
       END_STATE();
     case 13:
-      ACCEPT_TOKEN(aux_sym_median_token1);
-      if (lookahead == '-') ADVANCE(13);
+      ACCEPT_TOKEN(sym__input_line);
+      if (lookahead == '-') ADVANCE(12);
       if (lookahead != 0 &&
-          lookahead != '\n') ADVANCE(19);
+          lookahead != '\n') ADVANCE(15);
       END_STATE();
     case 14:
       ACCEPT_TOKEN(sym__input_line);
-      if (lookahead == '\r') ADVANCE(19);
+      if (lookahead == '\t' ||
+          (11 <= lookahead && lookahead <= '\r') ||
+          lookahead == ' ') ADVANCE(14);
       if (lookahead != 0 &&
-          lookahead != '\n') ADVANCE(19);
+          lookahead != '\n') ADVANCE(15);
       END_STATE();
     case 15:
       ACCEPT_TOKEN(sym__input_line);
-      if (lookahead == '-') ADVANCE(17);
-      if (lookahead == '\\') ADVANCE(14);
-      if (lookahead == '\t' ||
-          (11 <= lookahead && lookahead <= '\r') ||
-          lookahead == ' ') ADVANCE(15);
       if (lookahead != 0 &&
-          lookahead != '\n') ADVANCE(19);
+          lookahead != '\n') ADVANCE(15);
       END_STATE();
     case 16:
-      ACCEPT_TOKEN(sym__input_line);
-      if (lookahead == '-') ADVANCE(13);
-      if (lookahead != 0 &&
-          lookahead != '\n') ADVANCE(19);
-      END_STATE();
-    case 17:
-      ACCEPT_TOKEN(sym__input_line);
-      if (lookahead == '-') ADVANCE(16);
-      if (lookahead != 0 &&
-          lookahead != '\n') ADVANCE(19);
-      END_STATE();
-    case 18:
-      ACCEPT_TOKEN(sym__input_line);
-      if (lookahead == '\\') ADVANCE(14);
-      if (lookahead == '\t' ||
-          (11 <= lookahead && lookahead <= '\r') ||
-          lookahead == ' ') ADVANCE(18);
-      if (lookahead != 0 &&
-          lookahead != '\n') ADVANCE(19);
-      END_STATE();
-    case 19:
-      ACCEPT_TOKEN(sym__input_line);
-      if (lookahead != 0 &&
-          lookahead != '\n') ADVANCE(19);
-      END_STATE();
-    case 20:
       ACCEPT_TOKEN(anon_sym_LPAREN);
       END_STATE();
-    case 21:
+    case 17:
       ACCEPT_TOKEN(anon_sym_RPAREN);
       END_STATE();
-    case 22:
+    case 18:
       ACCEPT_TOKEN(sym_identifier);
       if (('0' <= lookahead && lookahead <= '9') ||
           ('A' <= lookahead && lookahead <= 'Z') ||
           lookahead == '_' ||
-          ('a' <= lookahead && lookahead <= 'z')) ADVANCE(22);
+          ('a' <= lookahead && lookahead <= 'z')) ADVANCE(18);
       END_STATE();
-    case 23:
+    case 19:
       ACCEPT_TOKEN(anon_sym_COLON);
       END_STATE();
     default:
@@ -461,7 +426,7 @@ static const uint16_t ts_parse_table[LARGE_STATE_COUNT][SYMBOL_COUNT] = {
   [0] = {
     [ts_builtin_sym_end] = ACTIONS(1),
     [aux_sym__header_token1] = ACTIONS(1),
-    [aux_sym_median_token1] = ACTIONS(1),
+    [aux_sym__median_token1] = ACTIONS(1),
     [anon_sym_LPAREN] = ACTIONS(1),
     [anon_sym_RPAREN] = ACTIONS(1),
     [sym_identifier] = ACTIONS(1),
@@ -607,14 +572,14 @@ static const uint16_t ts_small_parse_table[] = {
       aux_sym_output_repeat1,
   [171] = 3,
     ACTIONS(43), 1,
-      aux_sym_median_token1,
+      aux_sym__median_token1,
     ACTIONS(45), 1,
       sym__input_line,
     STATE(14), 1,
       aux_sym_input_repeat1,
   [181] = 3,
     ACTIONS(47), 1,
-      aux_sym_median_token1,
+      aux_sym__median_token1,
     ACTIONS(49), 1,
       sym__input_line,
     STATE(14), 1,
@@ -655,7 +620,7 @@ static const uint16_t ts_small_parse_table[] = {
       sym_identifier,
   [234] = 1,
     ACTIONS(47), 2,
-      aux_sym_median_token1,
+      aux_sym__median_token1,
       sym__input_line,
   [239] = 1,
     ACTIONS(62), 2,
@@ -663,9 +628,9 @@ static const uint16_t ts_small_parse_table[] = {
       aux_sym__header_token1,
   [244] = 2,
     ACTIONS(64), 1,
-      aux_sym_median_token1,
+      aux_sym__median_token1,
     STATE(10), 1,
-      sym_median,
+      sym__median,
   [251] = 1,
     ACTIONS(66), 1,
       anon_sym_COLON,
@@ -788,7 +753,7 @@ static const TSParseActionEntry ts_parse_actions[] = {
   [80] = {.entry = {.count = 1, .reusable = true}}, SHIFT(29),
   [82] = {.entry = {.count = 1, .reusable = true}}, SHIFT(23),
   [84] = {.entry = {.count = 1, .reusable = true}}, SHIFT(6),
-  [86] = {.entry = {.count = 1, .reusable = true}}, REDUCE(sym_median, 2),
+  [86] = {.entry = {.count = 1, .reusable = true}}, REDUCE(sym__median, 2),
   [88] = {.entry = {.count = 1, .reusable = true}},  ACCEPT_INPUT(),
   [90] = {.entry = {.count = 1, .reusable = true}}, SHIFT(3),
 };
@@ -826,10 +791,12 @@ unsigned tree_sitter_corpus_external_scanner_serialize(void *, char *);
 void tree_sitter_corpus_external_scanner_deserialize(void *, const char *, unsigned);
 
 #ifdef _WIN32
-#define extern __declspec(dllexport)
+#define TS_PUBLIC __declspec(dllexport)
+#else
+#define TS_PUBLIC __attribute__((visibility("default")))
 #endif
 
-extern const TSLanguage *tree_sitter_corpus(void) {
+TS_PUBLIC const TSLanguage *tree_sitter_corpus() {
   static const TSLanguage language = {
     .version = LANGUAGE_VERSION,
     .symbol_count = SYMBOL_COUNT,
