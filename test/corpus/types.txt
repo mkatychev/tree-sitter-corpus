@@ -1,5 +1,9 @@
 ================================================================================
 The unit type
+:skip
+:language(rust)
+:platform(macos)
+:error
 ================================================================================
 
 type A = ();
@@ -7,6 +11,10 @@ type A = ();
 --------------------------------------------------------------------------------
 
 (source_file
-  (type_item
-    (type_identifier)
-    (unit_type)))
+  (function_definition
+    name: (identifier)
+    parameters: (parameter_list)
+    result: (primitive_type)
+    body: (block
+      (return_statement (number)))))
+; comment

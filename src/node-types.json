@@ -1,39 +1,5 @@
 [
   {
-    "type": "field_definition",
-    "named": true,
-    "fields": {
-      "name": {
-        "multiple": true,
-        "required": true,
-        "types": [
-          {
-            "type": ":",
-            "named": false
-          },
-          {
-            "type": "identifier",
-            "named": true
-          }
-        ]
-      }
-    },
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "field_definition",
-          "named": true
-        },
-        {
-          "type": "node",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "input",
     "named": true,
     "fields": {}
@@ -41,24 +7,17 @@
   {
     "type": "node",
     "named": true,
-    "fields": {
-      "name": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "identifier",
-            "named": true
-          }
-        ]
-      }
-    },
+    "fields": {},
     "children": {
       "multiple": true,
-      "required": false,
+      "required": true,
       "types": [
         {
-          "type": "field_definition",
+          "type": "field_name",
+          "named": true
+        },
+        {
+          "type": "identifier",
           "named": true
         },
         {
@@ -122,7 +81,15 @@
           "named": true
         },
         {
+          "type": "language",
+          "named": true
+        },
+        {
           "type": "output",
+          "named": true
+        },
+        {
+          "type": "platform",
           "named": true
         }
       ]
@@ -141,7 +108,43 @@
     "named": false
   },
   {
+    "type": ":error",
+    "named": false
+  },
+  {
+    "type": ":fail-fast",
+    "named": false
+  },
+  {
+    "type": ":language",
+    "named": false
+  },
+  {
+    "type": ":platform",
+    "named": false
+  },
+  {
+    "type": ":skip",
+    "named": false
+  },
+  {
+    "type": "comment",
+    "named": true
+  },
+  {
+    "type": "field_name",
+    "named": true
+  },
+  {
     "type": "identifier",
+    "named": true
+  },
+  {
+    "type": "language",
+    "named": true
+  },
+  {
+    "type": "platform",
     "named": true
   },
   {

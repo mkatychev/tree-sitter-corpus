@@ -1,22 +1,3 @@
-// If your language’s syntax conflicts with the === and --- test separators,
-// you can optionally add an arbitrary identical suffix (in the below example, |||) to disambiguate them:
-/*
-==================|||
-Basic module
-==================|||
-
----- MODULE Test ----
-increment(n) == n + 1
-====
-
----|||
-
-(source_file
-  (module (identifier)
-    (operator (identifier)
-      (parameter_list (identifier))
-      (plus (identifier_ref) (number)))))
-*/
 
 
 /// Simple
@@ -41,7 +22,8 @@ func x() int {
 */
 const ESCAPE_SEQUENCE = token(/[-=]{3,}(.+)/);
 // https://github.com/tree-sitter/tree-sitter/blob/v0.22.1/cli/src/generate/dsl.js#L278
-const NODE_IDENTIFIER = /[a-zA-Z_]\w*/;
+const NODE_IDENTIFIER = token(/[a-zA-Z_]\w*/);
+const LANG_IDENTIFIER = /[a-zA-Z_][\w-]*/;
 // TODO add EBNF notation
 module.exports = grammar({
   name: 'corpus',
@@ -52,41 +34,104 @@ module.exports = grammar({
   ],
   // Allow comments, backslash-escaped newlines (with optional trailing whitespace),
   // and whitespace anywhere
-  // extras: _ => [/\\(\n|\r\n)\s*/, /\s/],
+  extras: $ => [$.comment, /\s/],
 
 
   rules: {
     source_file: $ => repeat($.test),
+    //     static ref HEADER_REGEX: ByteRegex = ByteRegexBuilder::new(
+    //     r"^(?x)
+    //        (?P<equals>(?:=+){3,})
+    //        (?P<suffix1>[^=\r\n][^\r\n]*)?
+    //        \r?\n
+    //        (?P<test_name>(?:[^=\r\n:][^\r\n]*\r?\n)+(?:(?:[ \t]*\r?\n)+)?)
+    //        (?P<markers>((?::(?:skip|error|fail-fast|(language|platform)\([^\r\n)]+\))\r?\n)*))
+    //        ===+
+    //        (?P<suffix2>[^=\r\n][^\r\n]*)?\r?\n"
+    // )
+    //
+
+    // Regex definitions
+    // https://github.com/tree-sitter/tree-sitter/blob/v0.22.1/cli/src/test.rs#L20-L29
 
     test: $ => seq($._header, $.input, $._median, $.output, $._newline),
-    _header: $ => seq(
-      /===+/,
-      field("name", $.text),
+    _test_name: $ => seq(field("name", $.text), $._newline),
+    _marker: $ => seq(
+      choice(
+        ":skip",
+        ":error",
+        ":fail-fast",
+        $._language_marker,
+        seq(":platform", "(", $.platform, ")"),
+      ),
       $._newline,
-      /===+/, $._newline,
+    ),
+    _language_marker: $ => seq(":language", "(", $.language, ")"),
+    language: _ => LANG_IDENTIFIER,
+    // https://doc.rust-lang.org/std/env/consts/constant.OS.html
+    platform: _ => /[a-z]+/,
+
+    _header_delim: $ => seq(/===+/, $._newline),
+    _header: $ => seq(
+      $._header_delim,
+      $._test_name,
+      repeat($._marker),
+      $._header_delim
     ),
     _median: $ => seq(/---+/, $._newline),
+    // https://tree-sitter.github.io/tree-sitter/creating-parsers
+    // > If your language’s syntax conflicts with the `===` and `---` test separators,
+    // > you can optionally add an arbitrary identical suffix (in the below example, `|||`) to disambiguate them:
+    /*
+    ==================|||
+    Basic module
+    ==================|||
+
+    ---- MODULE Test ----
+    increment(n) == n + 1
+    ====
+
+    ---|||
+
+    (source_file
+      (module (identifier)
+        (operator (identifier)
+          (parameter_list (identifier))
+          (plus (identifier_ref) (number)))))
+    */
+    _suffix: $ => token(/[^=]\S*/),
+    _header_delim_suffix: $ => seq(/===+/, $._suffix, $._newline),
+    _header_suffix: $ => seq(
+      $._header_delim_suffix,
+      $._test_name,
+      repeat($._marker),
+      $._header_delim_suffix,
+    ),
+    _median_suffix: $ => seq(/---+/, $._suffix, $._newline),
+
+
+
+
+
+
     // input
     _input_line: $ => /.+/,
     input: $ => repeat1(seq($._input_line, $._newline)),
     // output
     output: $ => repeat1($.node),
-    _node_expression: $ => choice(
-      $.node,
-      $.field_definition,
-    ),
     node: $ => seq(
       "(",
-      field("name", $.identifier),
-      repeat($._node_expression),
+      $.identifier,
+      repeat(seq(
+        optional(seq(alias($.identifier, $.field_name), ":")),
+        $.node,
+      )),
       ")"
     ),
     identifier: $ => NODE_IDENTIFIER,
-    _field_name: $ => seq($.identifier, ":"),
-    field_definition: $ => seq(
-      field("name", $._field_name),
-      $._node_expression,
-    ),
+
+    // `; ...` comment
+    comment: (_) => token(prec(-1, /;.*/)),
 
   }
 });
